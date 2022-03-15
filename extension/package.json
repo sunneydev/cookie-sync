@@ -1,6 +1,6 @@
 {
   "name": "cookie_sync",
-  "version": "0.1",
+  "version": "0.1.0",
   "description": "Synchronize cookies between chrome and Python",
   "scripts": {
     "dev": "tsc -p . --watch",
