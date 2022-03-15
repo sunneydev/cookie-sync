@@ -1,0 +1,11 @@
+{
+  "name": "Cookie Sync",
+  "description": "Synchronize cookies between chrome and Python",
+  "version": "0.1",
+  "manifest_version": 3,
+  "host_permissions": ["*://*.google.com/*"],
+  "permissions": ["cookies"],
+  "background": {
+    "service_worker": "build/sw.js"
+  }
+}
