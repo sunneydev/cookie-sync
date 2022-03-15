@@ -1,7 +1,5 @@
 # cookie-sync
 
-## Description
-
 ## About
 
 This is a simple extension that allows you to sync cookies between Chrome and Python using the [websocket](https://en.wikipedia.org/wiki/WebSocket) protocol.
@@ -17,13 +15,15 @@ This is a simple extension that allows you to sync cookies between Chrome and Py
 
 2. Download the and unarchive the extension from [releases](https://github.com/sunney-x/cookie-sync/releases)
 
-3. Set `host_permissions` for the target website in `manifest.json` 
+3. Set `host_permissions` for the target website in `manifest.json`
 
 4. Load the extension in Chrome
+
    - Go to `chrome://extensions`
    - Click `Load unpacked` and locate the extension folder
 
 5. Quickstart example
+
 ```python
 import aiohttp
 from cookie_sync import run_server
