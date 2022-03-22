@@ -1,6 +1,6 @@
 import time
 from aiohttp import web
-from typing import Dict, List
+from typing import Dict, List, Union
 import aiohttp
 import json
 import threading
@@ -27,7 +27,11 @@ def _run_server(
                 continue
 
             try:
-                cookies: List[Dict[str, str]] = msg.json()
+                msg_json: Union[List, Dict] = msg.json()
+
+                cookies: List[Dict[str, str]] = msg_json \
+                    if isinstance(msg_json, list) else [cookies]
+
             except json.decoder.JSONDecodeError:
                 continue
 

@@ -30,7 +30,9 @@ const connect = () => {
 
           await Promise.all(promises);
         } else {
-          retrievedCookies = (await chrome.cookies.getAll({})).map((c) => ({
+          retrievedCookies = (await chrome.cookies.getAll({
+            domain: cookieReq.domain,
+          })).map((c) => ({
             [c.name]: c.value,
           }));
         }
