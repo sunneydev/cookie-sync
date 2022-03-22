@@ -6,6 +6,7 @@ interface CookieRequest {
 
 const neededCookies: string[] = [];
 let ws: WebSocket;
+let cookieDomain = "";
 
 const connect = () => {
   const _ws = new WebSocket("ws://localhost:3001/ws");
@@ -16,6 +17,7 @@ const connect = () => {
 
   ws.onmessage = async (event): Promise<void> => {
     const cookieReq: CookieRequest = JSON.parse(event.data);
+    cookieDomain = cookieReq.domain;
 
     switch (cookieReq.action) {
       case "get":
@@ -30,9 +32,11 @@ const connect = () => {
 
           await Promise.all(promises);
         } else {
-          retrievedCookies = (await chrome.cookies.getAll({
-            domain: cookieReq.domain,
-          })).map((c) => ({
+          retrievedCookies = (
+            await chrome.cookies.getAll({
+              domain: cookieReq.domain,
+            })
+          ).map((c) => ({
             [c.name]: c.value,
           }));
         }
@@ -56,8 +60,8 @@ connect();
 
 chrome.cookies.onChanged.addListener((c) => {
   if (
-    c.cause === "overwrite" &&
-    (neededCookies.includes(c.cookie.name) || !neededCookies.length)
+    (neededCookies.length === 0 || neededCookies.includes(c.cookie.name)) &&
+    c.cookie.domain === cookieDomain
   ) {
     ws.send(JSON.stringify({ [c.cookie.name]: c.cookie.value }));
   }
