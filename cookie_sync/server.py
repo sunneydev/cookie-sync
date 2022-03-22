@@ -30,7 +30,7 @@ def _run_server(
                 msg_json: Union[List, Dict] = msg.json()
 
                 cookies: List[Dict[str, str]] = msg_json \
-                    if isinstance(msg_json, list) else [cookies]
+                    if isinstance(msg_json, list) else [msg_json]
 
             except json.decoder.JSONDecodeError:
                 continue
