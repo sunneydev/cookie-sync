@@ -5,10 +5,11 @@ import aiohttp
 import json
 import threading
 import asyncio
+import requests
 
 
 def _run_server(
-        session: aiohttp.ClientSession,
+        session: Union[aiohttp.ClientSession, requests.Session],
         cookie_names: List[str],
         domain: str,
 ):
@@ -35,8 +36,12 @@ def _run_server(
             except json.decoder.JSONDecodeError:
                 continue
 
-            for c in cookies:
-                session.cookie_jar.update_cookies(c)
+            if type(session) == aiohttp.ClientSession:
+                for c in cookies:
+                    session.cookie_jar.update_cookies(c)
+            else:
+                for c in cookies:
+                    session.cookies.update(c)
 
         return ws
 
@@ -64,8 +69,15 @@ def run_server(
     if wait_for_cookies:
         t = time.time()
 
-        while not len(session.cookie_jar):
-            if (time.time() - t) > timeout:
-                break
+        if type(session) == aiohttp.ClientSession:
+            while not len(session.cookie_jar):
+                if (time.time() - t) > timeout:
+                    break
 
-            pass
+                pass
+        else:
+            while not len(session.cookies):
+                if (time.time() - t) > timeout:
+                    break
+
+                pass
